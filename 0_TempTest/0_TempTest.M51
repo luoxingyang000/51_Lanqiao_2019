@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22                                                        02/18/2019  16:30:26  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22                                                        02/18/2019  19:04:47  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
@@ -21,13 +21,20 @@ LINK MAP OF MODULE:  0_TempTest (?C_STARTUP)
 
             * * * * * * *   D A T A   M E M O R Y   * * * * * * *
             REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
-            IDATA   0008H     0001H     UNIT         ?STACK
+            DATA    0008H     0006H     UNIT         ?DT?MAIN
+            IDATA   000EH     0001H     UNIT         ?STACK
 
             * * * * * * *   C O D E   M E M O R Y   * * * * * * *
             CODE    0000H     0003H     ABSOLUTE     
-                    0003H     07FDH                  *** GAP ***
-            CODE    0800H     0020H     UNIT         ?PR?MAIN?MAIN
-            CODE    0820H     000CH     UNIT         ?C_C51STARTUP
+                    0003H     0008H                  *** GAP ***
+            CODE    000BH     0003H     ABSOLUTE     
+                    000EH     000DH                  *** GAP ***
+            CODE    001BH     0003H     ABSOLUTE     
+                    001EH     07E2H                  *** GAP ***
+            CODE    0800H     003FH     UNIT         ?PR?MAIN?MAIN
+            CODE    083FH     002FH     UNIT         ?PR?T0SERVER?MAIN
+            CODE    086EH     0026H     UNIT         ?PR?T1SERVER?MAIN
+            CODE    0894H     000CH     UNIT         ?C_C51STARTUP
 
 
 
@@ -48,20 +55,20 @@ SYMBOL TABLE OF MODULE:  0_TempTest (?C_STARTUP)
   ----------------------------------
 
   -------         MODULE        ?C_STARTUP
-  C:0820H         SEGMENT       ?C_C51STARTUP
-  I:0008H         SEGMENT       ?STACK
+  C:0894H         SEGMENT       ?C_C51STARTUP
+  I:000EH         SEGMENT       ?STACK
   C:0000H         PUBLIC        ?C_STARTUP
   D:00E0H         SYMBOL        ACC
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/18/2019  19:04:47  PAGE 2
+
+
   D:00F0H         SYMBOL        B
   D:0083H         SYMBOL        DPH
   D:0082H         SYMBOL        DPL
   N:0000H         SYMBOL        IBPSTACK
   N:0100H         SYMBOL        IBPSTACKTOP
   N:0080H         SYMBOL        IDATALEN
-  C:0823H         SYMBOL        IDATALOOP
-BL51 BANKED LINKER/LOCATER V6.22                                                      02/18/2019  16:30:26  PAGE 2
-
-
+  C:0897H         SYMBOL        IDATALOOP
   N:0000H         SYMBOL        PBPSTACK
   N:0100H         SYMBOL        PBPSTACKTOP
   N:0000H         SYMBOL        PDATALEN
@@ -70,18 +77,18 @@ SYMBOL TABLE OF MODULE:  0_TempTest (?C_STARTUP)
   N:0000H         SYMBOL        PPAGEENABLE
   D:00A0H         SYMBOL        PPAGE_SFR
   D:0081H         SYMBOL        SP
-  C:0820H         SYMBOL        STARTUP1
+  C:0894H         SYMBOL        STARTUP1
   N:0000H         SYMBOL        XBPSTACK
   N:0000H         SYMBOL        XBPSTACKTOP
   N:0000H         SYMBOL        XDATALEN
   N:0000H         SYMBOL        XDATASTART
   C:0000H         LINE#         126
-  C:0820H         LINE#         133
-  C:0822H         LINE#         134
-  C:0823H         LINE#         135
-  C:0824H         LINE#         136
-  C:0826H         LINE#         185
-  C:0829H         LINE#         196
+  C:0894H         LINE#         133
+  C:0896H         LINE#         134
+  C:0897H         LINE#         135
+  C:0898H         LINE#         136
+  C:089AH         LINE#         185
+  C:089DH         LINE#         196
   -------         ENDMOD        ?C_STARTUP
 
   -------         MODULE        MAIN
@@ -92,29 +99,81 @@ SYMBOL TABLE OF MODULE:  0_TempTest (?C_STARTUP)
   D:00B0H         PUBLIC        P3
   D:00C0H         PUBLIC        P4
   D:00C8H         PUBLIC        P5
+  B:00A8H.7       PUBLIC        EA
   D:00E8H         PUBLIC        P6
   D:00F8H         PUBLIC        P7
   D:00A8H         PUBLIC        IE
   D:00B8H         PUBLIC        IP
+  C:083FH         PUBLIC        t0Server
+  C:086EH         PUBLIC        t1Server
   D:00D8H         PUBLIC        CCON
   C:0800H         PUBLIC        main
   D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
   D:0088H         PUBLIC        TCON
+  B:00A8H.1       PUBLIC        ET0
+  B:0088H.5       PUBLIC        TF0
+  B:00A8H.3       PUBLIC        ET1
+  D:0008H         PUBLIC        t0Cnt
+  B:0088H.7       PUBLIC        TF1
+  D:000AH         PUBLIC        t1Cnt
+  D:008CH         PUBLIC        TH0
+  D:008DH         PUBLIC        TH1
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/18/2019  19:04:47  PAGE 3
+
+
+  D:008AH         PUBLIC        TL0
+  D:000CH         PUBLIC        P0buff0
+  B:0088H.4       PUBLIC        TR0
+  D:000DH         PUBLIC        P0buff1
+  B:0088H.6       PUBLIC        TR1
   D:00D0H         PUBLIC        PSW
   -------         PROC          MAIN
-  C:0800H         LINE#         5
-  C:0800H         LINE#         6
   C:0800H         LINE#         8
-  C:0808H         LINE#         10
-  C:080FH         LINE#         12
-  C:0817H         LINE#         13
-  C:081EH         LINE#         15
+  C:0800H         LINE#         9
+  C:0800H         LINE#         11
+  C:0808H         LINE#         13
+  C:080FH         LINE#         15
+  C:0817H         LINE#         16
+  C:081EH         LINE#         18
+  C:0822H         LINE#         20
+  C:0824H         LINE#         21
+  C:082AH         LINE#         22
+  C:082FH         LINE#         23
+  C:0833H         LINE#         24
+  C:083DH         LINE#         26
   -------         ENDPROC       MAIN
+  -------         PROC          T0SERVER
+  C:083FH         LINE#         30
+  C:0843H         LINE#         32
+  C:084DH         LINE#         33
+  C:084DH         LINE#         34
+  C:0853H         LINE#         35
+  C:0856H         LINE#         36
+  C:085FH         LINE#         37
+  C:0861H         LINE#         38
+  C:0861H         LINE#         39
+  C:0869H         LINE#         40
+  C:0869H         LINE#         41
+  -------         ENDPROC       T0SERVER
+  -------         PROC          T1SERVER
+  C:086EH         LINE#         43
+  C:0870H         LINE#         45
+  C:0878H         LINE#         46
+  C:0878H         LINE#         47
+  C:087CH         LINE#         48
+  C:087FH         LINE#         49
+  C:0887H         LINE#         50
+  C:0889H         LINE#         51
+  C:0889H         LINE#         52
+  C:0891H         LINE#         53
+  C:0891H         LINE#         55
+  -------         ENDPROC       T1SERVER
   -------         ENDMOD        MAIN
 
 ******************************************************************************
-* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 002FH BYTE ( 2%) *
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 00A9H BYTE ( 8%) *
 ******************************************************************************
 
-Program Size: data=9.0 xdata=0 code=47
+Program Size: data=15.0 xdata=0 code=169
 LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)
