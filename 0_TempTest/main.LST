@@ -1,0 +1,39 @@
+C51 COMPILER V9.00   MAIN                                                                  02/18/2019 16:30:26 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          /*ULuo only for temporary testing and the code will be changed anytime*/
+   2          
+   3          #include"stc15f2k60s2.h"
+   4          
+   5          void main()
+   6          {
+   7   1          //关闭外设
+   8   1          P2=0xa0;P0=0;P2=0;
+   9   1          //LED亮
+  10   1          P2=0x80;P0=0;P2=0;
+  11   1          //共阳数码管全亮
+  12   1          P2=0xc0;P0=0xff;P2=0;
+  13   1          P2=0xe0;P0=0;P2=0;
+  14   1      
+  15   1          while(1);
+  16   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     32    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
