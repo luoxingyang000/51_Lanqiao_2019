@@ -1,4 +1,0 @@
-"STARTUP.obj",
-"main.obj" 
-TO "0_TempTest" 
-RAMSIZE(256) 
