@@ -3,3 +3,9 @@
 
 #include"main.h"
 
+
+//mainÖ÷º¯Êı
+void main()
+{
+
+}
