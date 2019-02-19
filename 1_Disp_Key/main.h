@@ -11,4 +11,3 @@ void main();
 void ledscan();
 void led_set(ulong numShow);
 void keyscan();
-void key_get();
