@@ -1,4 +1,0 @@
-"STARTUP.obj",
-"main.obj" 
-TO "1_Disp_Key" 
-RAMSIZE(256) 

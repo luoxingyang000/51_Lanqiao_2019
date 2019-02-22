@@ -78,14 +78,11 @@ void led_set(ulong numShow)
 //key按键扫描
 void keyscan()
 {
-    static uchar keyState;  //按键状态机
-    static uint keyLast,keyNow; //本次和上次键值记录
-    static uint keyCnt; //长短按计数
+    static uchar keyState,keyNow;  //按键状态机
     uchar kl,kr;    //临时行列键值
 
     //键盘行扫描
-    KR1=KR2=KR3=KR4=0;
-    KL1=KL2=KL3=KL4=1;
+    KR1=KR2=KR3=KR4=0; KL1=KL2=KL3=KL4=1;
     if(KL1==0){kl=1;}
     else if(KL2==0){kl=2;}
     else if(KL3==0){kl=3;}
@@ -93,8 +90,7 @@ void keyscan()
     else{kl=5;}
 
     //键盘列扫描
-    KL1=KL2=KL3=KL4=0;
-    KR1=KR2=KR3=KR4=1;
+    KL1=KL2=KL3=KL4=0; KR1=KR2=KR3=KR4=1;
     if(KR1==0){kr=1;}
     else if(KR2==0){kr=2;}
     else if(KR3==0){kr=3;}
@@ -106,48 +102,25 @@ void keyscan()
     //矩阵键盘状态机
     switch(keyState)
     {
-        case 0:
+        case 0: //闲置
         {
-            if(keyNow!=keyLast) keyState=1; //检测到按键动作
+            if(keyNow!=55) {keyState=1;}  //按下
         }break;
-        case 1:
+        case 1: //消抖
         {
-            if(keyNow==keyLast) keyState=2;    //消抖按下
-            else keyState=0;   //认为按键误触
-        }break;
-        case 2:
-        {
-            if(keyNow==keyLast) //按键仍然按下
+            if(keyNow!=55) 
             {
-                keyState=3;
-            }else   //认为短按
-            {
-                keyVal[0]=keyLast;keyVal[1]=0;  //返回短按值
-                keyState=0;
+                keyVal[0]=keyNow;keyVal[1]=0;   //返回短按
+                keyState=2;
             }
-        }break;
-        case 3:
+            else {keyState=0;}  //认为误触
+        }break; 
+        case 2: //消抖后
         {
-            if(keyNow==keyLast)
-            {
-                if(keyCnt++>100) //长按约1s
-                {
-                    keyCnt=0;
-                    keyVal[0]=keyLast;keyVal[1]=1;  //返回长按值
-                    keyState=4;
-                }else
-                {
-                    keyVal[0]=keyLast;keyVal[1]=0;  //返回短按值
-                    keyState=0;
-                }
-            }
+            if(keyNow==55) {keyState=0;}
         }break;
-        case 4:
-        {
-            if(keyNow!=keyLast) keyState=0;
-        }break;
+        default:keyState=0;break;
     }
-    keyLast=keyNow; //键值更新
 }
 
 
@@ -156,12 +129,12 @@ void t0Server() interrupt 1 //T0:1ms
     static uint keyTimeCnt;
     static ulong cntCnt;
 
-    //每10ms矩阵键盘扫描
-    if(keyTimeCnt==10)  
+    //每15ms矩阵键盘扫描
+    if(++keyTimeCnt==15)  
     {
         keyTimeCnt=0;
         keyscan();
-    }else{keyTimeCnt++;}
+    }
 
     //毫秒表
     if(isTimer==1)
@@ -171,24 +144,18 @@ void t0Server() interrupt 1 //T0:1ms
             cntCnt=0;
         }else
         {
-            led_set(keyVal[1]);
+            led_set(cntCnt);
             cntCnt++;
         }
     }
     
 
     //矩阵键盘响应服务
-    if(keyVal[0]==11 && keyVal[1]==0)
+    if(keyVal[0]==22 && keyVal[1]==0)
     {
         if(isTimer==0){isTimer=1;} 
         else{isTimer=0;}
         keyVal[0]=keyVal[1]=0;  //按键复位
     }
-    if(keyVal[0]==11 && keyVal[1]==1)
-    {
-        cntCnt=0;
-        keyVal[0]=keyVal[1]=0;  //按键复位
-    }
-    
     ledscan();
 }
