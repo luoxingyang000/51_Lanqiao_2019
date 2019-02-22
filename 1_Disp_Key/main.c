@@ -1,5 +1,5 @@
 /*2019蓝桥杯_1数码管和矩阵键盘*/
-/*目标实现：数码管显示矩阵键盘获得的数字*/
+/*目标实现：数码管显示秒并可启停和重置*/
 
 #include"main.h"
 
@@ -11,7 +11,7 @@ bit isTimer;    //毫秒计数使能
 uint keyVal[2]={0,0};  //矩阵键盘值与长短按状态
 
 uchar ledBuff[8]={0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};  //数码管显示缓存
-uchar ledChar[11]={0xC0,0xF9,0xA4,0xB0,0x99,0x92,0x82,0xF8,0x80,0x90,0xfd};    //共阳数码管段码表，10：-
+uchar ledChar[11]={0xC0,0xF9,0xA4,0xB0,0x99,0x92,0x82,0xF8,0x80,0x90,0xbf};    //共阳数码管段码表，10：-
 
 
 //main主函数
@@ -78,8 +78,7 @@ void led_set(ulong numShow)
 //key按键扫描
 void keyscan()
 {
-    static uchar keyState=0;  //按键状态机
-    static uchar keyNow,keyLast;
+    static uchar keyState,keyNow;  //按键状态机
     uchar kl,kr;    //临时行列键值
 
     //键盘行扫描
@@ -105,52 +104,50 @@ void keyscan()
     {
         case 0: //闲置
         {
-            if(keyNow!=keyLast) {keyState=1;}  //按下
+            if(keyNow!=55) {keyState=1;}  //按下
         }break;
-
         case 1: //消抖
         {
-            if(keyNow==keyLast) {keyState=2;}
+            if(keyNow!=55) 
+            {
+                keyVal[0]=keyNow;keyVal[1]=0;   //返回短按
+                keyState=2;
+            }
             else {keyState=0;}  //认为误触
         }break; 
-
         case 2: //消抖后
         {
-            if(keyNow==keyLast) {keyState=3;}
-            else
-            {
-                keyVal[0]=keyNow;keyVal[1]=0;   //返回短按值
-                keyState=0;
-            }
+            if(keyNow==55) {keyState=0;}
         }break;
-
-        case 3: //判断长短按
-        {
-            if(keyNow==keyLast)
-            {
-                static uchar keyCnt;
-                if(keyCnt++ > 80)  //0.8s
-                {
-                    keyVal[0]=keyNow;keyVal[1]=1;   //返回长按值
-                    keyState=4; keyCnt=0;
-                }
-            }
-            else
-            {
-                keyVal[0]=keyNow;keyVal[1]=0;   //返回短按值
-                keyState=0;
-            }
-        }break;
-
-        case 4: //长按松手
-        {
-            if(keyNow!=keyLast) {keyState=0;}
-        }break;
-
         default:keyState=0;break;
     }
+}
 
-    keyLast=keyNow; //更新键值
+void mode_show(uchar i)
+{
+    switch(i)
+    {
+        case 0: //暂停
+        {
+            ledBuff[0]=ledChar[10];
+            ledBuff[1]=ledChar[0];
+            ledBuff[2]=ledChar[10];
+        }break;
+
+        case 1: //启动
+        {
+            ledBuff[0]=ledChar[10];
+            ledBuff[1]=ledChar[1];
+            ledBuff[2]=ledChar[10];
+        }break;
+
+        case 2: //清零
+        {
+            ledBuff[0]=ledChar[10];
+            ledBuff[1]=ledChar[2];
+            ledBuff[2]=ledChar[10];
+        }break;
+    }
 }
 
 
@@ -159,8 +156,8 @@ void t0Server() interrupt 1 //T0:1ms
     static uint keyTimeCnt;
     static ulong cntCnt;
 
-    //每10ms矩阵键盘扫描
-    if(++keyTimeCnt==10)  
+    //每30ms矩阵键盘扫描
+    if(++keyTimeCnt==30)  
     {
         keyTimeCnt=0;
         keyscan();
@@ -169,35 +166,38 @@ void t0Server() interrupt 1 //T0:1ms
     //毫秒表
     if(isTimer==1)
     {
-        if(cntCnt==99999999)    
+        if(cntCnt==9999999)    
         {
             cntCnt=0;
+            mode_show(2);
+            ledBuff[7]=ledChar[0];
         }else
         {
-            led_set(cntCnt);
+            led_set(cntCnt/1000);
+            mode_show(1);
             cntCnt++;
         }
     }
+    
 
     //矩阵键盘响应服务
-    if(keyVal[0]==22)
+    switch(keyVal[0])
     {
-        switch(keyVal[1])
+        case 12:
         {
-            case 0:
-            {
-                if(isTimer==0){isTimer=1;} 
-                else{isTimer=0;}
-            }break;
+            if(isTimer==0){isTimer=1;} 
+            else{isTimer=0; mode_show(0);}
+            keyVal[0]=keyVal[1]=0;  //按键复位
+        }break;
 
-            case 1:
-            {
-                cntCnt=0; led_set(1); isTimer=1;
-            }break;
-
-            default:break;
-        }
-        keyVal[0]=keyVal[1]=0;  //按键复位
+        case 13:
+        {
+            cntCnt=0;
+            mode_show(2);
+            ledBuff[7]=ledChar[0];
+            keyVal[0]=keyVal[1]=0;  //按键复位
+        }break;
     }
+
     ledscan();
 }
