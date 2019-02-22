@@ -78,7 +78,8 @@ void led_set(ulong numShow)
 //key按键扫描
 void keyscan()
 {
-    static uchar keyState,keyNow;  //按键状态机
+    static uchar keyState=0;  //按键状态机
+    static uchar keyNow,keyLast;
     uchar kl,kr;    //临时行列键值
 
     //键盘行扫描
@@ -104,23 +105,52 @@ void keyscan()
     {
         case 0: //闲置
         {
-            if(keyNow!=55) {keyState=1;}  //按下
+            if(keyNow!=keyLast) {keyState=1;}  //按下
         }break;
+
         case 1: //消抖
         {
-            if(keyNow!=55) 
-            {
-                keyVal[0]=keyNow;keyVal[1]=0;   //返回短按
-                keyState=2;
-            }
+            if(keyNow==keyLast) {keyState=2;}
             else {keyState=0;}  //认为误触
         }break; 
+
         case 2: //消抖后
         {
-            if(keyNow==55) {keyState=0;}
+            if(keyNow==keyLast) {keyState=3;}
+            else
+            {
+                keyVal[0]=keyNow;keyVal[1]=0;   //返回短按值
+                keyState=0;
+            }
         }break;
+
+        case 3: //判断长短按
+        {
+            if(keyNow==keyLast)
+            {
+                static uchar keyCnt;
+                if(keyCnt++ > 80)  //0.8s
+                {
+                    keyVal[0]=keyNow;keyVal[1]=1;   //返回长按值
+                    keyState=4; keyCnt=0;
+                }
+            }
+            else
+            {
+                keyVal[0]=keyNow;keyVal[1]=0;   //返回短按值
+                keyState=0;
+            }
+        }break;
+
+        case 4: //长按松手
+        {
+            if(keyNow!=keyLast) {keyState=0;}
+        }break;
+
         default:keyState=0;break;
     }
+
+    keyLast=keyNow; //更新键值
 }
 
 
@@ -129,8 +159,8 @@ void t0Server() interrupt 1 //T0:1ms
     static uint keyTimeCnt;
     static ulong cntCnt;
 
-    //每15ms矩阵键盘扫描
-    if(++keyTimeCnt==15)  
+    //每10ms矩阵键盘扫描
+    if(++keyTimeCnt==10)  
     {
         keyTimeCnt=0;
         keyscan();
@@ -148,13 +178,25 @@ void t0Server() interrupt 1 //T0:1ms
             cntCnt++;
         }
     }
-    
 
     //矩阵键盘响应服务
-    if(keyVal[0]==22 && keyVal[1]==0)
+    if(keyVal[0]==22)
     {
-        if(isTimer==0){isTimer=1;} 
-        else{isTimer=0;}
+        switch(keyVal[1])
+        {
+            case 0:
+            {
+                if(isTimer==0){isTimer=1;} 
+                else{isTimer=0;}
+            }break;
+
+            case 1:
+            {
+                cntCnt=0; led_set(1); isTimer=1;
+            }break;
+
+            default:break;
+        }
         keyVal[0]=keyVal[1]=0;  //按键复位
     }
     ledscan();
