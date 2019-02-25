@@ -11,7 +11,9 @@ sbit DQ = P1^4;  //单总线接口
 //单总线延时函数
 void Delay_OneWire(unsigned int t)  //STC89C52RC
 {
-	while(t--);
+	unsigned int i;
+	for(i=0;i<12;i++)
+	{while(t--);}
 }
 
 //通过单总线向DS18B20写一个字节
