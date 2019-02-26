@@ -112,7 +112,6 @@ void keyscan()
 void t0Server() interrupt 1
 {
     static uint keyTimeCnt;
-    //static uint cursor=0; //光标位置
 
     //每30ms矩阵键盘扫描
     if(++keyTimeCnt==30)
@@ -183,51 +182,115 @@ void t0Server() interrupt 1
             //切换状态
             if(keyVal==13) {sysState=2;keyVal=0;}
             if(keyVal==14) {sysState=3;keyVal=0;}
+            if(keyVal==22) {sysState=4;keyVal=0;}
+            if(keyVal==44)  
+            {
+                //时间重设
+                sysState=0;keyVal=0;
+                timeNow[0]=timeNow[1]=timeNow[2]=timeNow[3]=timeNow[4]=timeNow[5]=10;
+            } 
         }break;
 
         case 2: //显示温度
         {
-            static uint i;
-            EA=0;
-            if(init_ds18b20()==0)
-            {
-                Write_DS18B20(0xcc);    //跳过ROM检测
-                Write_DS18B20(0x44);    //启动t转换
-                i=0;
-                Write_DS18B20(0xcc);    //跳过ROM检测
-                Write_DS18B20(0xbe);    //写读取指令
-                tLSB=Read_DS18B20();    //先读取低位
-                tMSB=Read_DS18B20();
-                tempreatureGet=((tMSB<<8)+tLSB)>>4;
-                led_set(tempreatureGet);
-            }
-            EA=1;
+            init_ds18b20();
+            Write_DS18B20(0xcc);    //跳过ROM检测
+            Write_DS18B20(0x44);    //启动t转换
+
+            init_ds18b20();
+            Write_DS18B20(0xcc);    //跳过ROM检测
+            Write_DS18B20(0xbe);    //写读取指令
+
+            tLSB=Read_DS18B20();    //先读取低位
+            tMSB=Read_DS18B20();
+            tempreatureGet=((tMSB<<8)+tLSB)>>4;
+            if(tempreatureGet==85) {tempreatureGet=0;}  //温度合法性检测
+
+            //温度报警
+            if(tempreatureGet>=25) {P2=0xa0;P0=0xf0;P2=0;}
+            else {P2=0xa0;P0=0;P2=0;}
+            led_set(tempreatureGet);
 
             //切换状态
-            if(keyVal==12) {sysState=1;EA=1;keyVal=0;}
-            if(keyVal==14) {sysState=3;EA=1;keyVal=0;}
+            if(keyVal==12) {sysState=1;keyVal=0;}
+            if(keyVal==14) {sysState=3;keyVal=0;}
+            if(keyVal==22) {sysState=4;keyVal=0;}
         }break;
 
         case 3: //显示ADC
         {
+            //初始化PCF8591
             IIC_Start();
             IIC_SendByte(0x90); //寻址
-            if(IIC_WaitAck()!=0)
-            {
-                IIC_Stop();
-                ledBuff[5]=ledChar[10];
-            }
-            IIC_SendByte(0x03); //AIN3
+            IIC_WaitAck();
+            IIC_SendByte(0x01); //AIN3
+            IIC_WaitAck();
+
+            //读取ADC值
             IIC_Start();
             IIC_SendByte(0x91); //寻址读
-            IIC_RecByte();  //读空字节
+            IIC_WaitAck();
             voltageGet=IIC_RecByte();   //读取读数
             IIC_Stop();
-            led_set(voltageGet);    //显示读数
+
+            //调节LED灯带
+            if(voltageGet<=10) {P2=0x80;P0=~0xff;P2=0;}
+            else if((voltageGet>10)&&(voltageGet<=40)) {P2=0x80;P0=~(0xff<<1);P2=0;}
+            else if((voltageGet>40)&&(voltageGet<=80)) {P2=0x80;P0=~(0xff<<2);P2=0;}
+            else if((voltageGet>80)&&(voltageGet<=120)) {P2=0x80;P0=~(0xff<<3);P2=0;}
+            else if((voltageGet>120)&&(voltageGet<=160)) {P2=0x80;P0=~(0xff<<4);P2=0;}
+            else if((voltageGet>160)&&(voltageGet<=200)) {P2=0x80;P0=~(0xff<<5);P2=0;}
+            else if((voltageGet>200)&&(voltageGet<=240)) {P2=0x80;P0=~(0xff<<6);P2=0;}
+            else {P2=0x80;P0=~(0xff<<7);P2=0;}
+            //显示读数
+            led_set(voltageGet);    
+            
+            //切换状态
+            if(keyVal==12) {sysState=1;P2=0x80;P0=0xff;P2=0;keyVal=0;}
+            if(keyVal==13) {sysState=2;P2=0x80;P0=0xff;P2=0;keyVal=0;}
+            if(keyVal==22) {sysState=4;P2=0x80;P0=0xff;P2=0;keyVal=0;}
+        }break;
+
+        case 4: //EEPROM记录切换模式次数
+        {
+            static uchar record;
+            static uint i,j;
+
+            //初始化AT24C02
+            IIC_Start();
+            IIC_SendByte(0xa0); //寻址
+            IIC_WaitAck();
+            IIC_SendByte(0x00);
+            IIC_WaitAck();
+            
+            //读取
+            IIC_Start();
+            IIC_SendByte(0xa1); //寻址读
+            IIC_WaitAck();
+            record=IIC_RecByte();
+            IIC_Ack(0);
+            IIC_Stop();
+
+            led_set(record);
+
+            if(++i==100)   //0.1s写入延迟，最低写入间隔10ms
+            {
+                i=0;record++;
+                //写入
+                IIC_Start();
+                IIC_SendByte(0xa0); //寻址
+                IIC_WaitAck();
+                IIC_SendByte(0x00);
+                IIC_WaitAck();
+                IIC_SendByte(record);
+                IIC_WaitAck();
+                IIC_Stop();
+            }
 
             //切换状态
             if(keyVal==12) {sysState=1;keyVal=0;}
             if(keyVal==13) {sysState=2;keyVal=0;}
+            if(keyVal==14) {sysState=3;keyVal=0;}
         }break;
 
         default:sysState=0;break;
