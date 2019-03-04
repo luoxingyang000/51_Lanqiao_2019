@@ -146,7 +146,9 @@ void t0Server() interrupt 1
             }
             if(cursor==6)
             {
-                hh=timeNow[0]*10+timeNow[1]; mm=timeNow[2]*10+timeNow[3]; ss=timeNow[4]*10+timeNow[5];
+                hh=timeNow[0]*10+timeNow[1];
+                mm=timeNow[2]*10+timeNow[3];
+                ss=timeNow[4]*10+timeNow[5];
                 cursor=0;sysState=1;
                 Write_Ds1302(0x8e,0);   //去写保护
                 Write_Ds1302(0x84,timeNow[0]*16+timeNow[1]);
@@ -232,17 +234,7 @@ void t0Server() interrupt 1
             IIC_WaitAck();
             voltageGet=IIC_RecByte();   //读取读数
             IIC_Stop();
-
-            //调节LED灯带
-            if(voltageGet<=10) {P2=0x80;P0=~0xff;P2=0;}
-            else if((voltageGet>10)&&(voltageGet<=40)) {P2=0x80;P0=~(0xff<<1);P2=0;}
-            else if((voltageGet>40)&&(voltageGet<=80)) {P2=0x80;P0=~(0xff<<2);P2=0;}
-            else if((voltageGet>80)&&(voltageGet<=120)) {P2=0x80;P0=~(0xff<<3);P2=0;}
-            else if((voltageGet>120)&&(voltageGet<=160)) {P2=0x80;P0=~(0xff<<4);P2=0;}
-            else if((voltageGet>160)&&(voltageGet<=200)) {P2=0x80;P0=~(0xff<<5);P2=0;}
-            else if((voltageGet>200)&&(voltageGet<=240)) {P2=0x80;P0=~(0xff<<6);P2=0;}
-            else {P2=0x80;P0=~(0xff<<7);P2=0;}
-            //显示读数
+            
             led_set(voltageGet);    
             
             //切换状态
@@ -254,7 +246,7 @@ void t0Server() interrupt 1
         case 4: //EEPROM记录切换模式次数
         {
             static uchar record;
-            static uint i,j;
+            static uint i;
 
             //初始化AT24C02
             IIC_Start();
