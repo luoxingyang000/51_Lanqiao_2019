@@ -1,26 +1,20 @@
-BL51 BANKED LINKER/LOCATER V6.22                                                        03/19/2019  19:48:31  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22                                                        03/22/2019  14:01:48  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
 C:\KEIL\C51\BIN\BL51.EXE STARTUP.obj, sys.obj TO sonic_uart_PWM RAMSIZE (256)
 
 
-MEMORY MODEL: SMALL WITH FLOATING POINT ARITHMETIC
+MEMORY MODEL: SMALL
 
 
 INPUT MODULES INCLUDED:
   STARTUP.obj (?C_STARTUP)
   sys.obj (SYS)
-  C:\KEIL\C51\LIB\C51FPS.LIB (?C?FPMUL)
-  C:\KEIL\C51\LIB\C51FPS.LIB (?C?FPDIV)
-  C:\KEIL\C51\LIB\C51FPS.LIB (?C?FCAST)
-  C:\KEIL\C51\LIB\C51FPS.LIB (?C?CASTF)
-  C:\KEIL\C51\LIB\C51FPS.LIB (?C?FPGETOPN)
   C:\KEIL\C51\LIB\C51S.LIB (?C_INIT)
   C:\KEIL\C51\LIB\C51S.LIB (?C?CLDPTR)
   C:\KEIL\C51\LIB\C51S.LIB (?C?ULDIV)
-  C:\KEIL\C51\LIB\C51S.LIB (?C?SLDIV)
-  C:\KEIL\C51\LIB\C51S.LIB (?C?LNEG)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?SLCMP)
 
 
 LINK MAP OF MODULE:  sonic_uart_PWM (?C_STARTUP)
@@ -35,40 +29,37 @@ LINK MAP OF MODULE:  sonic_uart_PWM (?C_STARTUP)
                     0018H     0008H                  *** GAP ***
             BIT     0020H.0   0000H.1   UNIT         ?BI?BUZZ?SYS
             BIT     0020H.1   0000H.1   UNIT         ?BI?RELAY?SYS
-            BIT     0020H.2   0000H.1   UNIT         ?BI?SYS
-                    0020H.3   0000H.5                *** GAP ***
-            DATA    0021H     001EH     UNIT         ?DT?SYS
-            IDATA   003FH     0001H     UNIT         ?STACK
+                    0020H.2   0000H.6                *** GAP ***
+            DATA    0021H     0020H     UNIT         ?DT?SYS
+            IDATA   0041H     0001H     UNIT         ?STACK
 
             * * * * * * *   C O D E   M E M O R Y   * * * * * * *
             CODE    0000H     0003H     ABSOLUTE     
-            CODE    0003H     0018H     UNIT         ?C_INITSEG
-            CODE    001BH     0003H     ABSOLUTE     
-            CODE    001EH     0001H     UNIT         ?PR?UART_GET?SYS
-                    001FH     0004H                  *** GAP ***
+            CODE    0003H     0008H     UNIT         ?PR?_UART_SENDBYTE?SYS
+            CODE    000BH     0003H     ABSOLUTE     
+            CODE    000EH     0015H     UNIT         ?PR?BUZZ?SYS
             CODE    0023H     0003H     ABSOLUTE     
-            CODE    0026H     035AH     UNIT         ?C?LIB_CODE
-            CODE    0380H     00E6H     UNIT         ?PR?T0SERVER?SYS
-            CODE    0466H     009BH     UNIT         ?PR?_LED_SET?SYS
-            CODE    0501H     0092H     UNIT         ?PR?KEYSCAN?SYS
-            CODE    0593H     008CH     UNIT         ?C_C51STARTUP
-            CODE    061FH     007FH     UNIT         ?PR?_PWM_SET?SYS
-            CODE    069EH     0049H     UNIT         ?PR?LEDSCAN?SYS
-            CODE    06E7H     0044H     UNIT         ?C?LDIV
-            CODE    072BH     0036H     UNIT         ?PR?MAIN?SYS
-            CODE    0761H     002CH     UNIT         ?PR?SYSMODESWITCH?SYS
-            CODE    078DH     001CH     UNIT         ?PR?_UART_SENDSTRING?SYS
-            CODE    07A9H     0015H     UNIT         ?PR?BUZZ?SYS
-BL51 BANKED LINKER/LOCATER V6.22                                                      03/19/2019  19:48:31  PAGE 2
-
-
-            CODE    07BEH     0015H     UNIT         ?PR?RELAY?SYS
-            CODE    07D3H     0011H     UNIT         ?PR?UART_INIT?SYS
-            CODE    07E4H     0008H     UNIT         ?PR?_UART_SENDBYTE?SYS
+            CODE    0026H     010CH     UNIT         ?PR?T0SERVER?SYS
+            CODE    0132H     0108H     UNIT         ?PR?SONIC_SENDWAVE?SYS
+            CODE    023AH     00FDH     UNIT         ?C?LIB_CODE
+            CODE    0337H     009BH     UNIT         ?PR?_LED_SET?SYS
+            CODE    03D2H     0092H     UNIT         ?PR?KEYSCAN?SYS
+            CODE    0464H     008CH     UNIT         ?C_C51STARTUP
+            CODE    04F0H     0049H     UNIT         ?PR?LEDSCAN?SYS
+            CODE    0539H     002FH     UNIT         ?PR?SYSMODESWITCH?SYS
+            CODE    0568H     0023H     UNIT         ?PR?MAIN?SYS
+            CODE    058BH     001CH     UNIT         ?PR?_UART_SENDSTRING?SYS
+            CODE    05A7H     0018H     UNIT         ?C_INITSEG
+            CODE    05BFH     0016H     UNIT         ?PR?UART_INIT?SYS
+            CODE    05D5H     0015H     UNIT         ?PR?RELAY?SYS
+            CODE    05EAH     0001H     UNIT         ?PR?UART_GET?SYS
 
 
 
 OVERLAY MAP OF MODULE:   sonic_uart_PWM (?C_STARTUP)
+
+
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/22/2019  14:01:48  PAGE 2
 
 
 SEGMENT                            DATA_GROUP 
@@ -79,21 +70,18 @@ SEGMENT                            DATA_GROUP
   +--> ?C_INITSEG
 
 ?PR?MAIN?SYS                     0008H    0002H
-  +--> ?PR?UART_INIT?SYS
-  +--> ?PR?_UART_SENDBYTE?SYS
+  +--> ?PR?SONIC_SENDWAVE?SYS
 
 *** NEW ROOT ***************************************************
 
 ?PR?T0SERVER?SYS                 -----    -----
   +--> ?PR?KEYSCAN?SYS
+  +--> ?PR?_UART_SENDBYTE?SYS
   +--> ?PR?_LED_SET?SYS
-  +--> ?PR?_PWM_SET?SYS
   +--> ?PR?SYSMODESWITCH?SYS
   +--> ?PR?LEDSCAN?SYS
 
 ?PR?_LED_SET?SYS                 000AH    000EH
-
-?PR?_PWM_SET?SYS                 000AH    0003H
 
 
 
@@ -103,8 +91,8 @@ SYMBOL TABLE OF MODULE:  sonic_uart_PWM (?C_STARTUP)
   ----------------------------------
 
   -------         MODULE        ?C_STARTUP
-  C:0593H         SEGMENT       ?C_C51STARTUP
-  I:003FH         SEGMENT       ?STACK
+  C:0464H         SEGMENT       ?C_C51STARTUP
+  I:0041H         SEGMENT       ?STACK
   C:0000H         PUBLIC        ?C_STARTUP
   D:00E0H         SYMBOL        ACC
   D:00F0H         SYMBOL        B
@@ -113,61 +101,55 @@ SYMBOL TABLE OF MODULE:  sonic_uart_PWM (?C_STARTUP)
   N:0000H         SYMBOL        IBPSTACK
   N:0100H         SYMBOL        IBPSTACKTOP
   N:0080H         SYMBOL        IDATALEN
-  C:0596H         SYMBOL        IDATALOOP
+  C:0467H         SYMBOL        IDATALOOP
   N:0000H         SYMBOL        PBPSTACK
   N:0100H         SYMBOL        PBPSTACKTOP
   N:0000H         SYMBOL        PDATALEN
   N:0000H         SYMBOL        PDATASTART
   N:0000H         SYMBOL        PPAGE
-BL51 BANKED LINKER/LOCATER V6.22                                                      03/19/2019  19:48:31  PAGE 3
-
-
   N:0000H         SYMBOL        PPAGEENABLE
   D:00A0H         SYMBOL        PPAGE_SFR
   D:0081H         SYMBOL        SP
-  C:0593H         SYMBOL        STARTUP1
+  C:0464H         SYMBOL        STARTUP1
   N:0000H         SYMBOL        XBPSTACK
   N:0000H         SYMBOL        XBPSTACKTOP
   N:0000H         SYMBOL        XDATALEN
   N:0000H         SYMBOL        XDATASTART
   C:0000H         LINE#         126
-  C:0593H         LINE#         133
-  C:0595H         LINE#         134
-  C:0596H         LINE#         135
-  C:0597H         LINE#         136
-  C:0599H         LINE#         185
-  C:059CH         LINE#         196
+  C:0464H         LINE#         133
+  C:0466H         LINE#         134
+  C:0467H         LINE#         135
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/22/2019  14:01:48  PAGE 3
+
+
+  C:0468H         LINE#         136
+  C:046AH         LINE#         185
+  C:046DH         LINE#         196
   -------         ENDMOD        ?C_STARTUP
 
   -------         MODULE        SYS
   C:0000H         SYMBOL        _ICE_DUMMY_
-  D:0026H         PUBLIC        pwmDuty
+  D:0029H         PUBLIC        pwmDuty
   B:0080H.4       PUBLIC        RELAY
   D:0080H         PUBLIC        P0
   D:0090H         PUBLIC        P1
   D:00A0H         PUBLIC        P2
-  B:0020H.2       PUBLIC        UARTBUSY
-  C:07E4H         PUBLIC        _uart_sendbyte
+  C:0003H         PUBLIC        _uart_sendbyte
   D:00B0H         PUBLIC        P3
-  C:061FH         PUBLIC        _pwm_set
   D:00C0H         PUBLIC        P4
   D:00C8H         PUBLIC        P5
   B:00A8H.7       PUBLIC        EA
   D:00E8H         PUBLIC        P6
   D:00F8H         PUBLIC        P7
+  B:0090H.0       PUBLIC        SONIC_TX
   D:00A8H         PUBLIC        IE
-  D:00FAH         PUBLIC        CCAP0H
-  D:00EAH         PUBLIC        CCAP0L
-  B:00D8H.6       PUBLIC        CR
-  D:00DAH         PUBLIC        CCAPM0
   B:00A8H.4       PUBLIC        ES
   D:00B8H         PUBLIC        IP
   B:0098H.0       PUBLIC        RI
   B:0098H.1       PUBLIC        TI
-  C:07BEH         PUBLIC        relay
-  D:00D9H         PUBLIC        CMOD
+  C:05D5H         PUBLIC        relay
   D:00D8H         PUBLIC        CCON
-  C:072BH         PUBLIC        main
+  C:0568H         PUBLIC        main
   D:0099H         PUBLIC        SBUF
   B:00B0H.0       PUBLIC        P30
   D:0098H         PUBLIC        SCON
@@ -177,90 +159,94 @@ SYMBOL TABLE OF MODULE:  sonic_uart_PWM (?C_STARTUP)
   B:00B0H.2       PUBLIC        P32
   B:00C0H.2       PUBLIC        P42
   B:00B0H.3       PUBLIC        P33
-  D:0028H         PUBLIC        ledChar
+  D:002AH         PUBLIC        ledChar
   B:00B0H.4       PUBLIC        P34
-BL51 BANKED LINKER/LOCATER V6.22                                                      03/19/2019  19:48:31  PAGE 4
-
-
   B:00C0H.4       PUBLIC        P44
   B:00B0H.5       PUBLIC        P35
-  D:0033H         PUBLIC        ledBuff
-  C:0380H         PUBLIC        t0server
+  D:0035H         PUBLIC        ledBuff
+  C:0026H         PUBLIC        t0server
   D:008EH         PUBLIC        AUXR
+  C:0132H         PUBLIC        sonic_sendWave
+  B:00A8H.1       PUBLIC        ET0
   B:00A8H.3       PUBLIC        ET1
   B:0080H.6       PUBLIC        BUZZ
   D:008CH         PUBLIC        TH0
-  C:07A9H         PUBLIC        buzz
+  C:000EH         PUBLIC        buzz
   D:008DH         PUBLIC        TH1
-  D:00D6H         PUBLIC        T2H
   D:008AH         PUBLIC        TL0
   D:008BH         PUBLIC        TL1
-  D:00D7H         PUBLIC        T2L
-  C:07D3H         PUBLIC        uart_init
+  C:05BFH         PUBLIC        uart_init
   B:0088H.4       PUBLIC        TR0
   B:0088H.6       PUBLIC        TR1
-  D:00F2H         PUBLIC        PCA_PWM0
-  C:069EH         PUBLIC        ledscan
-  C:0761H         PUBLIC        sysModeSwitch
-  C:001EH         PUBLIC        uart_get
-  C:0466H         PUBLIC        _led_set
-  D:003BH         PUBLIC        sysState
-  D:003CH         PUBLIC        pwmFreq
-  C:078DH         PUBLIC        _uart_sendstring
-  D:003EH         PUBLIC        keyVal
-  C:0501H         PUBLIC        keyscan
-  D:008FH         PUBLIC        INT_CLKO
+  C:04F0H         PUBLIC        ledscan
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/22/2019  14:01:48  PAGE 4
+
+
+  C:0539H         PUBLIC        sysModeSwitch
+  C:05EAH         PUBLIC        uart_get
+  D:003DH         PUBLIC        INT0cnt
+  C:0337H         PUBLIC        _led_set
+  D:003FH         PUBLIC        sysState
+  C:058BH         PUBLIC        _uart_sendstring
+  D:0040H         PUBLIC        keyVal
+  C:03D2H         PUBLIC        keyscan
   D:00D0H         PUBLIC        PSW
   -------         PROC          MAIN
   -------         DO            
   D:0008H         SYMBOL        i
   -------         ENDDO         
-  C:072BH         LINE#         10
-  C:072BH         LINE#         11
-  C:072BH         LINE#         13
-  C:0733H         LINE#         15
-  C:0742H         LINE#         16
-  C:0745H         LINE#         17
-  C:074BH         LINE#         18
-  C:074EH         LINE#         19
-  C:0754H         LINE#         21
-  C:075FH         LINE#         23
-  C:075FH         LINE#         24
-  C:075FH         LINE#         26
+  C:0568H         LINE#         10
+  C:0568H         LINE#         11
+  C:0568H         LINE#         14
+  C:0577H         LINE#         15
+  C:057AH         LINE#         16
+  C:0580H         LINE#         17
+  C:0586H         LINE#         19
+  C:0586H         LINE#         20
+  C:0586H         LINE#         21
+  C:0589H         LINE#         22
   -------         ENDPROC       MAIN
   -------         PROC          T0SERVER
   -------         DO            
-  D:0021H         SYMBOL        keyCnt
-  D:0022H         SYMBOL        uartCnt
+  D:0023H         SYMBOL        keyCnt
+  D:0024H         SYMBOL        uartCnt
+  D:0025H         SYMBOL        pwmCnt
+  -------         DO            
+  D:0021H         SYMBOL        i
   -------         ENDDO         
-  C:0380H         LINE#         30
-  C:039DH         LINE#         34
-  C:03AAH         LINE#         36
-  C:03BCH         LINE#         37
-  C:03BCH         LINE#         38
-  C:03BCH         LINE#         39
-BL51 BANKED LINKER/LOCATER V6.22                                                      03/19/2019  19:48:31  PAGE 5
+  -------         ENDDO         
+  C:0026H         LINE#         26
+  C:0043H         LINE#         30
+  C:0050H         LINE#         32
+  C:0065H         LINE#         33
+  C:0065H         LINE#         34
+  C:0065H         LINE#         35
+  C:0065H         LINE#         36
+  C:006BH         LINE#         37
+  C:006DH         LINE#         39
+  C:006DH         LINE#         40
+  C:006DH         LINE#         42
+  C:0075H         LINE#         43
+  C:0094H         LINE#         44
+  C:009FH         LINE#         45
+  C:00A1H         LINE#         47
+  C:00A1H         LINE#         48
+  C:00A1H         LINE#         49
+  C:00B0H         LINE#         50
+  C:00C7H         LINE#         51
+  C:00DFH         LINE#         52
+  C:00E1H         LINE#         54
+  C:00E1H         LINE#         55
+  C:00E1H         LINE#         57
+  C:00E6H         LINE#         59
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/22/2019  14:01:48  PAGE 5
 
 
-  C:03BCH         LINE#         40
-  C:03C5H         LINE#         41
-  C:03C7H         LINE#         43
-  C:03C7H         LINE#         44
-  C:03C7H         LINE#         46
-  C:03C9H         LINE#         48
-  C:03C9H         LINE#         49
-  C:03C9H         LINE#         50
-  C:03D2H         LINE#         51
-  C:03DCH         LINE#         52
-  C:03EFH         LINE#         53
-  C:0403H         LINE#         54
-  C:0421H         LINE#         55
-  C:0440H         LINE#         56
-  C:0440H         LINE#         58
-  C:0445H         LINE#         63
-  C:0448H         LINE#         64
-  C:0448H         LINE#         65
-  C:044BH         LINE#         66
+  C:00E9H         LINE#         60
+  C:00E9H         LINE#         62
+  C:00FEH         LINE#         63
+  C:0114H         LINE#         65
+  C:0117H         LINE#         66
   -------         ENDPROC       T0SERVER
   -------         PROC          _LED_SET
   D:000AH         SYMBOL        num
@@ -268,207 +254,190 @@ SYMBOL TABLE OF MODULE:  sonic_uart_PWM (?C_STARTUP)
   D:000EH         SYMBOL        buf
   D:0016H         SYMBOL        i
   -------         ENDDO         
-  C:0466H         LINE#         70
-  C:046EH         LINE#         71
-  C:046EH         LINE#         75
-  C:0473H         LINE#         76
-  C:0473H         LINE#         77
-  C:0490H         LINE#         78
-  C:04A9H         LINE#         79
-  C:04B7H         LINE#         81
-  C:04BCH         LINE#         82
-  C:04BCH         LINE#         83
-  C:04CBH         LINE#         84
-  C:04CBH         LINE#         85
-  C:04D9H         LINE#         87
-  C:04E4H         LINE#         88
-  C:04E4H         LINE#         89
-  C:04F6H         LINE#         90
-  C:0500H         LINE#         91
+  C:0337H         LINE#         70
+  C:033FH         LINE#         71
+  C:033FH         LINE#         75
+  C:0344H         LINE#         76
+  C:0344H         LINE#         77
+  C:0361H         LINE#         78
+  C:037AH         LINE#         79
+  C:0388H         LINE#         81
+  C:038DH         LINE#         82
+  C:038DH         LINE#         83
+  C:039CH         LINE#         84
+  C:039CH         LINE#         85
+  C:03AAH         LINE#         87
+  C:03B5H         LINE#         88
+  C:03B5H         LINE#         89
+  C:03C7H         LINE#         90
+  C:03D1H         LINE#         91
   -------         ENDPROC       _LED_SET
   -------         PROC          LEDSCAN
   -------         DO            
-  D:0023H         SYMBOL        i
+  D:0026H         SYMBOL        i
   -------         ENDDO         
-  C:069EH         LINE#         94
-  C:069EH         LINE#         95
-  C:069EH         LINE#         97
-  C:06ACH         LINE#         98
-  C:06C6H         LINE#         99
-  C:06D9H         LINE#         100
-  C:06E6H         LINE#         101
+  C:04F0H         LINE#         94
+  C:04F0H         LINE#         95
+  C:04F0H         LINE#         97
+  C:04FEH         LINE#         98
+  C:0518H         LINE#         99
+  C:052BH         LINE#         100
+  C:0538H         LINE#         101
   -------         ENDPROC       LEDSCAN
   -------         PROC          KEYSCAN
-BL51 BANKED LINKER/LOCATER V6.22                                                      03/19/2019  19:48:31  PAGE 6
-
-
   -------         DO            
-  D:0024H         SYMBOL        keyState
-  D:0025H         SYMBOL        keyNow
+  D:0027H         SYMBOL        keyState
+  D:0028H         SYMBOL        keyNow
   D:0006H         SYMBOL        kl
   D:0007H         SYMBOL        kr
   -------         ENDDO         
-  C:0501H         LINE#         104
-  C:0501H         LINE#         105
-  C:0501H         LINE#         109
-  C:0511H         LINE#         110
-  C:0518H         LINE#         111
-  C:051FH         LINE#         112
-  C:0526H         LINE#         113
-  C:052DH         LINE#         114
-  C:052FH         LINE#         116
-  C:053FH         LINE#         117
-  C:0546H         LINE#         118
-  C:054DH         LINE#         119
-  C:0554H         LINE#         120
-  C:055BH         LINE#         121
-  C:055DH         LINE#         123
-  C:0565H         LINE#         125
-  C:0571H         LINE#         126
-  C:0571H         LINE#         127
-  C:0571H         LINE#         128
-  C:0571H         LINE#         129
-  C:057AH         LINE#         130
-  C:057BH         LINE#         131
-  C:057BH         LINE#         132
-  C:057BH         LINE#         133
-  C:0588H         LINE#         136
-  C:0588H         LINE#         137
-  C:0588H         LINE#         138
-  C:058DH         LINE#         139
-  C:058FH         LINE#         140
-  C:0592H         LINE#         141
-  C:0592H         LINE#         142
+  C:03D2H         LINE#         104
+  C:03D2H         LINE#         105
+  C:03D2H         LINE#         109
+  C:03E2H         LINE#         110
+  C:03E9H         LINE#         111
+  C:03F0H         LINE#         112
+  C:03F7H         LINE#         113
+  C:03FEH         LINE#         114
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/22/2019  14:01:48  PAGE 6
+
+
+  C:0400H         LINE#         116
+  C:0410H         LINE#         117
+  C:0417H         LINE#         118
+  C:041EH         LINE#         119
+  C:0425H         LINE#         120
+  C:042CH         LINE#         121
+  C:042EH         LINE#         123
+  C:0436H         LINE#         125
+  C:0442H         LINE#         126
+  C:0442H         LINE#         127
+  C:0442H         LINE#         128
+  C:0442H         LINE#         129
+  C:044BH         LINE#         130
+  C:044CH         LINE#         131
+  C:044CH         LINE#         132
+  C:044CH         LINE#         133
+  C:0459H         LINE#         136
+  C:0459H         LINE#         137
+  C:0459H         LINE#         138
+  C:045EH         LINE#         139
+  C:0460H         LINE#         140
+  C:0463H         LINE#         141
+  C:0463H         LINE#         142
   -------         ENDPROC       KEYSCAN
   -------         PROC          SYSMODESWITCH
-  C:0761H         LINE#         144
-  C:0761H         LINE#         145
-  C:0761H         LINE#         146
-  C:0771H         LINE#         147
-  C:0771H         LINE#         148
-  C:0778H         LINE#         149
-  C:077FH         LINE#         150
-  C:0786H         LINE#         151
-  C:078CH         LINE#         152
-  C:078CH         LINE#         153
-  C:078CH         LINE#         154
+  C:0539H         LINE#         144
+  C:0539H         LINE#         145
+  C:0539H         LINE#         146
+  C:0549H         LINE#         147
+  C:0549H         LINE#         148
+  C:0550H         LINE#         149
+  C:0557H         LINE#         150
+  C:0561H         LINE#         151
+  C:0567H         LINE#         152
+  C:0567H         LINE#         153
+  C:0567H         LINE#         154
   -------         ENDPROC       SYSMODESWITCH
   -------         PROC          UART_INIT
-  C:07D3H         LINE#         158
-  C:07D3H         LINE#         159
-  C:07D3H         LINE#         160
-  C:07D6H         LINE#         161
-  C:07DCH         LINE#         162
-BL51 BANKED LINKER/LOCATER V6.22                                                      03/19/2019  19:48:31  PAGE 7
-
-
-  C:07DFH         LINE#         163
-  C:07E3H         LINE#         164
+  C:05BFH         LINE#         158
+  C:05BFH         LINE#         159
+  C:05BFH         LINE#         160
+  C:05C2H         LINE#         161
+  C:05C5H         LINE#         162
+  C:05C8H         LINE#         163
+  C:05CEH         LINE#         164
+  C:05D4H         LINE#         165
   -------         ENDPROC       UART_INIT
   -------         PROC          _UART_SENDBYTE
   D:0007H         SYMBOL        dat
-  C:07E4H         LINE#         166
-  C:07E4H         LINE#         167
-  C:07E4H         LINE#         168
-  C:07E6H         LINE#         169
-  C:07E9H         LINE#         170
-  C:07EBH         LINE#         171
+  C:0003H         LINE#         167
+  C:0003H         LINE#         168
+  C:0003H         LINE#         169
+  C:0005H         LINE#         170
+  C:0008H         LINE#         171
+  C:000AH         LINE#         172
   -------         ENDPROC       _UART_SENDBYTE
   -------         PROC          _UART_SENDSTRING
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/22/2019  14:01:48  PAGE 7
+
+
   D:0001H         SYMBOL        str
   -------         DO            
   D:0001H         SYMBOL        p
   -------         ENDDO         
-  C:078DH         LINE#         174
-  C:078DH         LINE#         175
-  C:078DH         LINE#         177
-  C:078DH         LINE#         178
-  C:0792H         LINE#         179
-  C:0792H         LINE#         180
-  C:0794H         LINE#         181
-  C:0797H         LINE#         182
-  C:0799H         LINE#         183
-  C:07A0H         LINE#         184
-  C:07A2H         LINE#         185
-  C:07A8H         LINE#         186
+  C:058BH         LINE#         175
+  C:058BH         LINE#         176
+  C:058BH         LINE#         178
+  C:058BH         LINE#         179
+  C:0590H         LINE#         180
+  C:0590H         LINE#         181
+  C:0592H         LINE#         182
+  C:0595H         LINE#         183
+  C:0597H         LINE#         184
+  C:059EH         LINE#         185
+  C:05A0H         LINE#         186
+  C:05A6H         LINE#         187
   -------         ENDPROC       _UART_SENDSTRING
   -------         PROC          UART_GET
-  C:001EH         LINE#         189
-  C:001EH         LINE#         192
+  C:05EAH         LINE#         190
+  C:05EAH         LINE#         193
   -------         ENDPROC       UART_GET
-  -------         PROC          _PWM_SET
-  D:000AH         SYMBOL        freq
-  D:000CH         SYMBOL        duty
-  C:061FH         LINE#         196
-  C:0625H         LINE#         197
-  C:0625H         LINE#         198
-  C:0645H         LINE#         199
-  C:0667H         LINE#         200
-  C:0669H         LINE#         202
-  C:066CH         LINE#         203
-  C:066EH         LINE#         205
-  C:0671H         LINE#         206
-  C:0674H         LINE#         207
-  C:069DH         LINE#         208
-  -------         ENDPROC       _PWM_SET
   -------         PROC          BUZZ
   B:0020H.0       SYMBOL        i
-  C:07A9H         LINE#         212
-  C:07A9H         LINE#         213
-  C:07A9H         LINE#         214
-  C:07B1H         LINE#         215
-  C:07B8H         LINE#         216
-  C:07BAH         LINE#         217
-BL51 BANKED LINKER/LOCATER V6.22                                                      03/19/2019  19:48:31  PAGE 8
-
-
-  C:07BDH         LINE#         218
+  C:000EH         LINE#         201
+  C:000EH         LINE#         202
+  C:000EH         LINE#         203
+  C:0016H         LINE#         204
+  C:001DH         LINE#         205
+  C:001FH         LINE#         206
+  C:0022H         LINE#         207
   -------         ENDPROC       BUZZ
   -------         PROC          RELAY
   B:0020H.1       SYMBOL        i
-  C:07BEH         LINE#         221
-  C:07BEH         LINE#         222
-  C:07BEH         LINE#         223
-  C:07C6H         LINE#         224
-  C:07CDH         LINE#         225
-  C:07CFH         LINE#         226
-  C:07D2H         LINE#         227
+  C:05D5H         LINE#         210
+  C:05D5H         LINE#         211
+  C:05D5H         LINE#         212
+  C:05DDH         LINE#         213
+  C:05E4H         LINE#         214
+  C:05E6H         LINE#         215
+  C:05E9H         LINE#         216
   -------         ENDPROC       RELAY
+  -------         PROC          SONIC_SENDWAVE
+  -------         DO            
+  D:0006H         SYMBOL        i
+  -------         ENDDO         
+  C:0132H         LINE#         220
+  C:0132H         LINE#         221
+  C:0132H         LINE#         222
+  C:0136H         LINE#         224
+  C:0136H         LINE#         225
+  C:0138H         LINE#         226
+  C:01B1H         LINE#         227
+  C:01B3H         LINE#         228
+  C:022CH         LINE#         229
+  C:022CH         LINE#         230
+  C:0239H         LINE#         231
+  -------         ENDPROC       SONIC_SENDWAVE
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/22/2019  14:01:48  PAGE 8
+
+
   -------         ENDMOD        SYS
 
-  -------         MODULE        ?C?FPMUL
-  C:0026H         PUBLIC        ?C?FPMUL
-  -------         ENDMOD        ?C?FPMUL
-
-  -------         MODULE        ?C?FPDIV
-  C:012FH         PUBLIC        ?C?FPDIV
-  -------         ENDMOD        ?C?FPDIV
-
-  -------         MODULE        ?C?FCAST
-  C:01D6H         PUBLIC        ?C?FCASTC
-  C:01D1H         PUBLIC        ?C?FCASTI
-  C:01CCH         PUBLIC        ?C?FCASTL
-  -------         ENDMOD        ?C?FCAST
-
-  -------         MODULE        ?C?CASTF
-  C:020AH         PUBLIC        ?C?CASTF
-  -------         ENDMOD        ?C?CASTF
-
   -------         MODULE        ?C?CLDPTR
-  C:028BH         PUBLIC        ?C?CLDPTR
+  C:023AH         PUBLIC        ?C?CLDPTR
   -------         ENDMOD        ?C?CLDPTR
 
   -------         MODULE        ?C?ULDIV
-  C:02E0H         PUBLIC        ?C?ULDIV
+  C:028FH         PUBLIC        ?C?ULDIV
   -------         ENDMOD        ?C?ULDIV
 
-  -------         MODULE        ?C?SLDIV
-  C:06E7H         PUBLIC        ?C?SLDIV
-  -------         ENDMOD        ?C?SLDIV
+  -------         MODULE        ?C?SLCMP
+  C:0321H         PUBLIC        ?C?SLCMP
+  -------         ENDMOD        ?C?SLCMP
 
-  -------         MODULE        ?C?LNEG
-  C:0372H         PUBLIC        ?C?LNEG
-  -------         ENDMOD        ?C?LNEG
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?UART_INIT?SYS
 
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_UART_SENDSTRING?SYS
@@ -479,8 +448,5 @@ SYMBOL TABLE OF MODULE:  sonic_uart_PWM (?C_STARTUP)
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?RELAY?SYS
 
-BL51 BANKED LINKER/LOCATER V6.22                                                      03/19/2019  19:48:31  PAGE 9
-
-
-Program Size: data=55.3 xdata=0 code=2024
-LINK/LOCATE RUN COMPLETE.  3 WARNING(S),  0 ERROR(S)
+Program Size: data=57.2 xdata=0 code=1515
+LINK/LOCATE RUN COMPLETE.  4 WARNING(S),  0 ERROR(S)
